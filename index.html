@@ -22,7 +22,6 @@
             <div class="logo">
                 <a href="/">videy</a>
             </div>
-            <!-- Kita buat tombol upload ini memanggil fungsi dari JS kita -->
             <div class="upload" onclick="handleClick();">Upload</div>
             <div class="more">
                 <a href="#" target="_blank">Advertise</a>
@@ -30,7 +29,6 @@
         </div>
 
         <!-- === BAGIAN KONTEN UTAMA === -->
-        <!-- Kita bungkus konten asli dalam sebuah div agar bisa disembunyikan -->
         <div id="upload-section">
             <div class="text">
                 <div class="main-line">Free and Simple Video Hosting</div>
@@ -44,12 +42,20 @@
         <!-- Ini adalah area untuk player kita, awalnya disembunyikan -->
         <div id="player-section" class="hidden">
             <div id="video-wrapper">
-                <!-- Iframe akan muncul di sini -->
+                <!-- Iframe akan muncul di sini (dari script.js) -->
+
+                <!-- === OVERLAY PLAYER UNTUK IKLAN === -->
+                <div id="player-overlay">
+                    <div class="play-button-container">
+                        <!-- Ikon 'play' dari SVG, agar ringan dan tajam -->
+                        <svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><path d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"></path></svg>
+                    </div>
+                </div>
+                <!-- === AKHIR DARI OVERLAY === -->
             </div>
         </div>
         <!-- === AKHIR BAGIAN KONTEN UTAMA === -->
 
-        <!-- Form untuk upload, tetap disembunyikan -->
         <form action="https://videy.co/api/upload" method="POST" id="form">
             <input name="file" type="file" id="selectedFile" class="clickListenerFile" style="display: none;" />
         </form>
@@ -64,7 +70,6 @@
         </div>
     </div>
 
-    <!-- Logika utama kita ada di sini -->
     <script src="script.js"></script>
 </body>
 </html>
