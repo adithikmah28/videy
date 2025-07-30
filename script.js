@@ -1,15 +1,17 @@
+// ==========================================================
+// == GANTI LINK DI BAWAH INI DENGAN DIRECT LINK ADSTERRA-MU ==
+// ==========================================================
+const adsterraDirectLink = "https://example.com/your-adsterra-link";
+
 // Menjalankan semua fungsi setelah halaman siap
 $(document).ready(function() {
 
     // --- BAGIAN 1: LOGIKA PLAYER ---
     const uploadSection = $('#upload-section');
     const playerSection = $('#player-section');
-
-    // Baca parameter 'v' dari URL
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('v');
 
-    // Jika ada ID video, tampilkan player
     if (videoId) {
         uploadSection.addClass('hidden');
         playerSection.removeClass('hidden');
@@ -20,42 +22,46 @@ $(document).ready(function() {
             allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
             allowfullscreen: true
         });
-
         $('#video-wrapper').append(iframe);
+
+        // --- LOGIKA OVERLAY IKLAN ---
+        const playerOverlay = $('#player-overlay');
+        
+        // Menggunakan .one() agar event hanya berjalan satu kali saja
+        playerOverlay.one('click', function() {
+            // 1. Buka link Adsterra di tab baru
+            window.open(adsterraDirectLink, '_blank');
+            
+            // 2. Hilangkan overlay dengan menambahkan class
+            $(this).addClass('overlay-hidden');
+        });
     }
 
     // --- BAGIAN 2: LOGIKA UPLOAD (Diambil dari Videy.co) ---
-    // Set tahun di footer
     $('#year').text(new Date().getFullYear());
 
-    // Fungsi handle klik upload
     window.handleClick = function() {
         if ($(".clickListenerFile").length > 0) {
             $(".clickListenerFile").click();
         }
     }
 
-    // Event listener untuk file input change
     $(".clickListenerFile").on('change', function() {
         upload();
     });
 
-    // Fungsi upload (AJAX call ke API Videy)
     function upload() {
         const fileInput = $("#selectedFile")[0].files[0];
         const errorDiv = $(".upload-error");
-
         errorDiv.hide().text('');
 
         if (fileInput) {
-            // Validasi tipe file
             if (fileInput.type !== 'video/mp4' && fileInput.type !== 'video/quicktime') {
                 alert('Unsupported File Type. Only MP4 and MOV are supported.');
                 $("#selectedFile").val('');
                 return;
             }
             
-            // Validasi ukuran file (100MB)
             const maxFileSize = 100 * 1024 * 1024;
             if (fileInput.size > maxFileSize) {
                 errorDiv.text("Error: too large, please upload a file less than 100MB").show();
@@ -87,8 +93,10 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
                 success: function(result) {
-                    // Redirect ke halaman video setelah sukses
-                    window.location.href = result.link;
+                    const videoLink = result.link;
+                    const parts = videoLink.split('/');
+                    const newId = parts.pop();
+                    window.location.href = `/play/${newId}`;
                 },
                 error: function() {
                     $(".box-upload").html("Upload a Video").removeClass("animate");
