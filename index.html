@@ -1,57 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Videy Clone — Free Video Hosting & Player</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            font-family: sans-serif;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #player-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .instructions {
-            text-align: center;
-            padding: 20px;
-        }
-        code {
-            background-color: #333;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Dependencies dari Videy.co -->
+    <link rel="icon" type="image/x-icon" href="https://videy.co/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- CSS buatan kita -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-    <div id="player-container">
-        <!-- Iframe akan dimasukkan di sini oleh JavaScript -->
-        <div class="instructions">
-            <h1>Video Player</h1>
-            <p>ID video tidak ditemukan.</p>
-            <p>Gunakan format: <code>?v=ID_VIDEO_DARI_VIDEY</code> di akhir URL.</p>
+
+    <div class="container">
+        <div class="top">
+            <div class="logo">
+                <a href="/">videy</a>
+            </div>
+            <!-- Kita buat tombol upload ini memanggil fungsi dari JS kita -->
+            <div class="upload" onclick="handleClick();">Upload</div>
+            <div class="more">
+                <a href="#" target="_blank">Advertise</a>
+            </div>
+        </div>
+
+        <!-- === BAGIAN KONTEN UTAMA === -->
+        <!-- Kita bungkus konten asli dalam sebuah div agar bisa disembunyikan -->
+        <div id="upload-section">
+            <div class="text">
+                <div class="main-line">Free and Simple Video Hosting</div>
+                <div class="second-line">Get started without an account</div>
+            </div>
+            <div class="box">
+                <div class="box-upload" onclick="handleClick();">Upload a Video</div>
+            </div>
+        </div>
+
+        <!-- Ini adalah area untuk player kita, awalnya disembunyikan -->
+        <div id="player-section" class="hidden">
+            <div id="video-wrapper">
+                <!-- Iframe akan muncul di sini -->
+            </div>
+        </div>
+        <!-- === AKHIR BAGIAN KONTEN UTAMA === -->
+
+        <!-- Form untuk upload, tetap disembunyikan -->
+        <form action="https://videy.co/api/upload" method="POST" id="form">
+            <input name="file" type="file" id="selectedFile" class="clickListenerFile" style="display: none;" />
+        </form>
+        <div class="upload-error" style="display: none"></div>
+
+        <div class="footer">
+            <div class="copyright"> Copyright © <span id="year"></span> videy clone </div>
+            <div class="legal">
+                <div class="item"><a href="#">Terms of Service</a></div>
+                <div class="item"><a href="#">Report Abuse</a></div>
+            </div>
         </div>
     </div>
 
+    <!-- Logika utama kita ada di sini -->
     <script src="script.js"></script>
-
 </body>
 </html>
