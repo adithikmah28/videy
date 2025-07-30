@@ -93,10 +93,8 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
                 success: function(result) {
-                    const videoLink = result.link;
-                    const parts = videoLink.split('/');
-                    const newId = parts.pop();
-                    window.location.href = `/play/${newId}`;
+                    // Langsung arahkan ke link yang diberikan oleh Videy.co
+                    window.location.href = result.link;
                 },
                 error: function() {
                     $(".box-upload").html("Upload a Video").removeClass("animate");
