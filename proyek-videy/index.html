@@ -47,24 +47,20 @@
             padding: 20px 0;
         }
         
-        /* Container Video Player */
+        /* Container Video Player (UKURAN LUARNYA TETAP) */
         .video-player-container {
             width: 100%;
             background-color: #000;
             border-radius: 12px;
             overflow: hidden;
-            
-            /* ========================================================== */
-            /* INI BAGIAN YANG DIUBAH SESUAI PERMINTAAN                   */
-            /* Rasio aspek diubah menjadi sedikit lebih lebar (tidak terlalu tinggi) */
-            /* Opsi lain: 2 / 3 atau 4 / 5. Coba-coba saja mana yang paling pas. */
-            aspect-ratio: 3 / 4;
-            /* ========================================================== */
+            aspect-ratio: 3 / 4; /* Ukuran kotak luar tidak berubah */
         }
+
+        /* INI DIA PERBAIKANNYA */
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Diubah dari 'cover' menjadi 'contain' */
         }
     </style>
 </head>
