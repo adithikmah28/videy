@@ -47,21 +47,27 @@
             padding: 20px 0;
         }
         
-        /* Container Video Player (UKURAN LUARNYA TETAP) */
+        /* Container Video Player */
         .video-player-container {
             width: 100%;
             background-color: #000;
             border-radius: 12px;
             overflow: hidden;
-            aspect-ratio: 3 / 4; /* Ukuran kotak luar tidak berubah */
+            
+            /* ========================================================== */
+            /* KEMBALI KE RASIO ASPEK TINGGI SEPERTI DI SCREENSHOT TARGET */
+            aspect-ratio: 9 / 16;
+            /* ========================================================== */
         }
-
-        /* INI DIA PERBAIKANNYA */
+        
+        /* ========================================================== */
+        /* INI PERBAIKAN PALING PENTING UNTUK MENDAPATKAN TAMPILAN GAMBAR 2 */
         video {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Diubah dari 'cover' menjadi 'contain' */
+            object-fit: cover; /* Diubah kembali menjadi 'cover' */
         }
+        /* ========================================================== */
     </style>
 </head>
 <body>
@@ -97,14 +103,13 @@
             }
         };
 
+        // ... Sisa script JavaScript tetap sama, tidak perlu diubah ...
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
             const videoId = params.get('id');
             const videoData = videoId ? videoList[videoId] : null;
-            
             const pageContent = document.getElementById('page-content');
             const player = document.getElementById('videoPlayer');
-
             if (videoData) {
                 pageContent.style.display = 'block';
                 document.title = videoData.title;
@@ -115,11 +120,7 @@
                     playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
                 }
                 player.addEventListener('click', () => {
-                    if (player.paused) {
-                        player.play();
-                    } else {
-                        player.pause();
-                    }
+                    if (player.paused) { player.play(); } else { player.pause(); }
                 });
             }
         });
