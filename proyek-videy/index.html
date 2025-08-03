@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <title>Watch on Videy</title>
+    <title>Videy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
-    <!-- CSS REKAYASA ULANG DARI style.css MEREKA -->
+    <!-- CSS REKAYASA ULANG DARI videy.co -->
     <style>
-        /* Pengaturan Dasar & Font */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #fff;
@@ -20,17 +19,13 @@
             color: inherit;
             text-decoration: none;
         }
-
-        /* Container Utama */
         .container {
             width: 100%;
-            max-width: 960px; /* Lebar konten standar */
+            max-width: 960px;
             margin: 0 auto;
             padding: 0 15px;
             box-sizing: border-box;
         }
-
-        /* Header (class .top) */
         .top {
             display: flex;
             justify-content: space-between;
@@ -53,8 +48,6 @@
         .top .more a {
             font-size: 14px;
         }
-        
-        /* Area Video (class .video) */
         .video {
             padding: 20px 0;
             display: flex;
@@ -62,21 +55,17 @@
         }
         .video-inner {
             width: 100%;
-            max-width: 400px; /* Lebar player video */
+            max-width: 400px;
             background-color: #000;
             border-radius: 12px;
             overflow: hidden;
-            /* Rasio aspek potret yang tinggi */
             aspect-ratio: 9 / 16;
         }
         video {
             width: 100%;
             height: 100%;
-            /* Memenuhi container, sama seperti videy.co */
             object-fit: cover;
         }
-
-        /* Footer */
         .footer {
             padding: 20px 0;
             margin-top: 20px;
@@ -94,7 +83,7 @@
 </head>
 <body>
 
-    <!-- Kita akan sembunyikan container ini jika ID video tidak valid -->
+    <!-- Container utama, awalnya disembunyikan. Hanya akan muncul untuk tipe 'video'. -->
     <div id="page-content" class="container" style="display: none;">
       <div class="top">
         <div class="logo">
@@ -110,16 +99,12 @@
       
       <div class="video">
         <div class="video-inner">
-          <!-- ID video diubah menjadi 'videoPlayer' agar cocok dengan script kita -->
           <video id="videoPlayer" controls playsinline>
             <source type="video/mp4">
           </video>
         </div>
       </div>
       
-      <!-- Di sini bisa ditaruh slot iklan jika mau -->
-      <div class="as"></div>
-
       <div class="footer">
         <div class="copyright"> Copyright © <span id="year"></span> videy</div>
         <div class="legal">
@@ -129,68 +114,65 @@
       </div>
     </div>
 
+    <!-- SCRIPT UTAMA WEBSITE YANG SUDAH DI-UPGRADE -->
     <script>
-        // --- DATABASE VIDEO STATIS KITA ---
+        // --- DATABASE VIDEO & LINK KAMU ---
         const videoList = {
+            // CONTOH VIDEO BIASA
             "ibi1ehxw0s": {
-                title: "Contoh Video Satu",
+                type: 'video',
+                title: "Contoh Video Keren",
                 filename: "video1.mp4" 
             },
-            "2xtqstiqc1": {
-                title: "Contoh Video Dua",
-                filename: "https://videy.co/v/?id=fJXv2ya21"
+            // CONTOH DIRECT LINK ADSTERRA
+            "p3w9rntb2z": {
+                type: 'redirect',
+                title: 'Loading...',
+                url: 'https://www.profitableratecpm.com/n628mmmy13?key=cf801284c3d129d36815d85e16c550f8'
             }
+            // Tambahkan video atau link lain di sini
         };
 
-        // --- LOGIKA UTAMA WEBSITE KITA ---
+        // --- LOGIKA UTAMA WEBSITE (SUDAH DI-UPGRADE) ---
         document.addEventListener("DOMContentLoaded", () => {
-            // Mengatur tahun di footer secara otomatis
-            document.getElementById('year').textContent = new Date().getFullYear();
-
-            // Mendapatkan ID video dari URL
             const params = new URLSearchParams(window.location.search);
             const videoId = params.get('id');
-            const videoData = videoId ? videoList[videoId] : null;
+            const data = videoId ? videoList[videoId] : null;
             
-            // Mengambil elemen-elemen penting
-            const pageContent = document.getElementById('page-content');
-            const player = document.getElementById('videoPlayer');
+            if (data) {
+                // LOGIKA BARU: Cek tipe data
+                if (data.type === 'redirect') {
+                    // Jika tipe adalah REDIRECT, langsung alihkan pengguna
+                    document.title = data.title;
+                    window.location.replace(data.url);
 
-            if (videoData) {
-                // Jika video ditemukan, tampilkan seluruh halaman
-                pageContent.style.display = 'block';
+                } else if (data.type === 'video') {
+                    // Jika tipe adalah VIDEO, tampilkan halaman player
+                    const pageContent = document.getElementById('page-content');
+                    const player = document.getElementById('videoPlayer');
+                    
+                    pageContent.style.display = 'block';
+                    document.getElementById('year').textContent = new Date().getFullYear();
+                    document.title = data.title + " — Watch on Videy";
+                    player.src = `videos/${data.filename}`;
+                    
+                    player.muted = true;
+                    let playPromise = player.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
+                    }
 
-                // Atur judul tab browser
-                document.title = videoData.title + " — Watch on Videy";
-                
-                // Atur sumber video
-                player.src = `videos/${videoData.filename}`;
-
-                // Memulai video secara otomatis (muted)
-                player.muted = true;
-                let playPromise = player.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
+                    player.addEventListener('click', () => {
+                        if (player.paused) { player.play(); } else { player.pause(); }
+                    });
                 }
 
-                // Menambahkan fitur klik-untuk-play/pause
-                player.addEventListener('click', () => {
-                    if (player.paused) {
-                        player.play();
-                    } else {
-                        player.pause();
-                    }
-                });
             } else {
-                // Jika ID video tidak valid, halaman akan tetap kosong (karena #page-content tetap display:none)
-                document.body.innerHTML = '<h1>404: Video Not Found</h1>'; // Tampilkan pesan error
-                document.body.style.display = 'flex';
-                document.body.style.justifyContent = 'center';
-                document.body.style.alignItems = 'center';
-                document.body.style.height = '100vh';
+                // Jika ID tidak ditemukan sama sekali, tampilkan pesan error
+                document.body.innerHTML = '<h1>404: Not Found</h1>';
+                document.body.style.cssText = 'display:flex; justify-content:center; align-items:center; height:100vh; font-family: sans-serif;';
             }
         });
     </script>
 </body>
 </html>
-
