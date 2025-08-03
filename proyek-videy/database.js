@@ -11,7 +11,7 @@ const videoList = {
     "2xtqstiqc1": {
         type: 'video',
         title: "Contoh Video Keren",
-        filename: "video-keren.mp4" 
+        filename: "video1.mp4" 
     },
     "u7xje8fka9": {
         type: 'video',
