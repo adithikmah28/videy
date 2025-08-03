@@ -5,37 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videy</title>
     <style>
+        /* CSS Reset & Basic Setup */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #121212;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff; /* Latar belakang putih */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* HEADER / NAVBAR */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            border-bottom: 1px solid #e5e5e5;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            z-index: 100;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+        .upload-btn {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .advertise-link {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            padding-top: 80px; /* Jarak dari header */
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Mulai dari atas */
         }
-        .main-container {
+
+        /* Video Player & Iklan Container */
+        .video-wrapper {
             width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
+            max-width: 400px; /* Lebar video player seperti di HP, bisa disesuaikan */
         }
+        
         .video-player-container {
             width: 100%;
-            margin-bottom: 20px;
             background-color: #000;
+            /* Membuat rasio aspek 9:16 (seperti video TikTok/Shorts) */
+            aspect-ratio: 9 / 16;
+            margin-bottom: 20px; /* Jarak ke iklan di bawah */
+            border-radius: 12px;
+            overflow: hidden; /* Agar video tidak keluar dari border-radius */
         }
         video {
             width: 100%;
-            max-height: 70vh;
-            border-radius: 8px;
+            height: 100%;
+            object-fit: cover; /* Pastikan video memenuhi container */
         }
+
+        /* Area Iklan */
         .ad-slot {
-            min-height: 50px;
             width: 100%;
-            margin: 15px 0;
+            min-height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -44,37 +93,36 @@
 </head>
 <body>
 
-    <div id="content-wrapper" class="main-container" style="display: none;">
+    <!-- Konten hanya akan muncul jika URL memiliki ID yang valid -->
+    <div id="page-content" style="display: none;">
+        <header class="header">
+            <div class="header-left">
+                <span class="logo">videy</span>
+                <button class="upload-btn">Upload</button>
+            </div>
+            <a href="#" class="advertise-link">Advertise</a>
+        </header>
 
-        <!-- ====================================================== -->
-        <!-- TEMPAT IKLAN ADSTERRA #1 (di atas video)              -->
-        <div class="ad-slot" id="ad-slot-1">
-            <!-- Tempel kode iklan Adsterra kamu di sini. -->
-        </div>
-        <!-- ====================================================== -->
-
-        <div id="player-wrapper" class="video-player-container">
-            <!-- ========================================================== -->
-            <!-- INI BAGIAN YANG DIPERBAIKI: DITAMBAHKAN "muted"            -->
-            <video id="videoPlayer" controls autoplay muted playsinline></video>
-            <!-- ========================================================== -->
-        </div>
-
-        <!-- ====================================================== -->
-        <!-- TEMPAT IKLAN ADSTERRA #2 (di bawah video)             -->
-        <div class="ad-slot" id="ad-slot-2">
-            <!-- Tempel kode iklan Adsterra kamu di sini. -->
-        </div>
-        <!-- ====================================================== -->
-        
+        <main class="main-content">
+            <div class="video-wrapper">
+                <div id="player-wrapper" class="video-player-container">
+                    <!-- Atribut autoplay dan muted dihapus dari sini, kita kontrol via JS -->
+                    <video id="videoPlayer" controls playsinline></video>
+                </div>
+                
+                <div class="ad-slot" id="ad-slot-1">
+                    <!-- TEMPEL KODE IKLAN ADSTERRA DI SINI -->
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
-        // --- DAFTAR VIDEO KAMU (EDIT BAGIAN INI) ---
+        // --- DATABASE VIDEO KAMU (EDIT BAGIAN INI) ---
         const videoList = {
-            "fki0bm24qw": {
+            "3e9b4yo5go": {
                 title: "Contoh Video Satu",
-                filename: "video1.mp4" 
+                filename: "/videos/video1.mp4" 
             },
             "p3w9rntb2z": {
                 title: "Contoh Video Dua",
@@ -88,15 +136,32 @@
             const videoId = params.get('id');
             const videoData = videoId ? videoList[videoId] : null;
             
-            const contentWrapper = document.getElementById('content-wrapper');
+            const pageContent = document.getElementById('page-content');
+            const player = document.getElementById('videoPlayer');
 
             if (videoData) {
-                contentWrapper.style.display = 'block';
+                // Tampilkan seluruh konten halaman
+                pageContent.style.display = 'block';
+
                 document.title = videoData.title;
-                document.getElementById('videoPlayer').src = `videos/${videoData.filename}`;
+                player.src = `videos/${videoData.filename}`;
+
+                // --- BAGIAN PERBAIKAN PLAYBACK ---
+                player.muted = true; // WAJIB untuk autoplay di browser modern
+                
+                // Coba putar video secara programmatic
+                let playPromise = player.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        // Autoplay diblokir oleh browser.
+                        // Tidak apa-apa, tombol play masih akan berfungsi karena atribut 'controls' ada.
+                        console.log("Autoplay diblokir, pengguna harus menekan play manual.");
+                    });
+                }
             }
+            // Jika ID tidak valid, 'page-content' tetap display:none, halaman akan tampak kosong.
         });
     </script>
-
 </body>
 </html>
