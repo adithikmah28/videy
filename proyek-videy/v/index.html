@@ -1,170 +1,75 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videy</title>
+    <link rel="icon" type="image/x-icon" href="https://videy.co/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS Reset & Basic Setup */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: #ffffff; /* Latar belakang putih */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        /* HEADER / NAVBAR */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            border-bottom: 1px solid #e5e5e5;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: #ffffff;
-            z-index: 100;
-        }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #000;
-        }
-        .upload-btn {
-            background-color: #f0f0f0;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .advertise-link {
-            font-size: 14px;
-            color: #333;
-            text-decoration: none;
-        }
-
-        /* MAIN CONTENT AREA */
-        .main-content {
-            padding-top: 80px; /* Jarak dari header */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Mulai dari atas */
-        }
-
-        /* Video Player & Iklan Container */
-        .video-wrapper {
-            width: 100%;
-            max-width: 400px; /* Lebar video player seperti di HP, bisa disesuaikan */
-        }
-        
-        .video-player-container {
-            width: 100%;
-            background-color: #000;
-            /* Membuat rasio aspek 9:16 (seperti video TikTok/Shorts) */
-            aspect-ratio: 9 / 16;
-            margin-bottom: 20px; /* Jarak ke iklan di bawah */
-            border-radius: 12px;
-            overflow: hidden; /* Agar video tidak keluar dari border-radius */
-        }
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Pastikan video memenuhi container */
-        }
-
-        /* Area Iklan */
-        .ad-slot {
-            width: 100%;
-            min-height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        /* CSS tetap sama persis, tidak ada perubahan */
+        body { font-family: 'Inter', sans-serif; background-color: #fff; margin: 0; color: #000; }
+        a { color: inherit; text-decoration: none; }
+        .container { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 15px; box-sizing: border-box; }
+        .top { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #e5e5e5; }
+        .top .logo a { font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; }
+        .top .upload { background: #f2f2f2; padding: 8px 16px; border-radius: 16px; font-size: 14px; font-weight: 500; }
+        .top .more a { font-size: 14px; }
+        .video { padding: 20px 0; display: flex; justify-content: center; }
+        .video-inner { width: 100%; max-width: 400px; background-color: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 9 / 16; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        video:fullscreen { object-fit: contain; }
+        video:-webkit-full-screen { object-fit: contain; }
+        .footer { padding: 20px 0; margin-top: 20px; border-top: 1px solid #e5e5e5; font-size: 14px; color: #666; display: flex; justify-content: space-between; }
+        .footer .legal { display: flex; gap: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- Konten hanya akan muncul jika URL memiliki ID yang valid -->
-    <div id="page-content" style="display: none;">
-        <header class="header">
-            <div class="header-left">
-                <span class="logo">videy</span>
-                <button class="upload-btn">Upload</button>
-            </div>
-            <a href="#" class="advertise-link">Advertise</a>
-        </header>
-
-        <main class="main-content">
-            <div class="video-wrapper">
-                <div id="player-wrapper" class="video-player-container">
-                    <!-- Atribut autoplay dan muted dihapus dari sini, kita kontrol via JS -->
-                    <video id="videoPlayer" controls playsinline></video>
-                </div>
-                
-                <div class="ad-slot" id="ad-slot-1">
-                    <!-- TEMPEL KODE IKLAN ADSTERRA DI SINI -->
-                </div>
-            </div>
-        </main>
+    <div id="page-content" class="container" style="display: none;">
+      <!-- HTML untuk header, video, dan footer tetap sama -->
+      <div class="top"><div class="logo"><a href="#">videy</a></div><a href="#"><div class="upload">Upload</div></a><div class="more"><a href="#">Advertise</a></div></div>
+      <div class="video"><div class="video-inner"><video id="videoPlayer" controls playsinline></video></div></div>
+      <div class="footer"><div class="copyright"> Copyright © <span id="year"></span> videy</div><div class="legal"><div class="item"><a href="#">Terms of Service</a></div><div class="item"><a href="#">Report Abuse</a></div></div></div>
     </div>
 
-    <script>
-        // --- DATABASE VIDEO KAMU (EDIT BAGIAN INI) ---
-        const videoList = {
-            "3e9b4yo5go": {
-                title: "Contoh Video Satu",
-                filename: "video1.mp4" 
-            },
-            "p3w9rntb2z": {
-                title: "Contoh Video Dua",
-                filename: "video-dua.mp4"
-            }
-        };
-        // ----------------------------------------------------
+    <!-- Panggil file database dari folder induk (../) -->
+    <script src="../database.js"></script>
 
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
             const videoId = params.get('id');
-            const videoData = videoId ? videoList[videoId] : null;
+            const data = videoId ? videoList[videoId] : null;
             
-            const pageContent = document.getElementById('page-content');
-            const player = document.getElementById('videoPlayer');
-
-            if (videoData) {
-                // Tampilkan seluruh konten halaman
-                pageContent.style.display = 'block';
-
-                document.title = videoData.title;
-                player.src = `videos/${videoData.filename}`;
-
-                // --- BAGIAN PERBAIKAN PLAYBACK ---
-                player.muted = true; // WAJIB untuk autoplay di browser modern
-                
-                // Coba putar video secara programmatic
-                let playPromise = player.play();
-
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        // Autoplay diblokir oleh browser.
-                        // Tidak apa-apa, tombol play masih akan berfungsi karena atribut 'controls' ada.
-                        console.log("Autoplay diblokir, pengguna harus menekan play manual.");
+            if (data) {
+                if (data.type === 'redirect') {
+                    document.title = data.title;
+                    window.location.replace(data.url);
+                } else if (data.type === 'video') {
+                    const pageContent = document.getElementById('page-content');
+                    const player = document.getElementById('videoPlayer');
+                    pageContent.style.display = 'block';
+                    document.getElementById('year').textContent = new Date().getFullYear();
+                    document.title = data.title + " — Watch on Videy";
+                    // PATH VIDEO JUGA BERUBAH, HARUS MENGGUNAKAN ../
+                    player.src = `../videos/${data.filename}`;
+                    
+                    player.muted = true;
+                    let playPromise = player.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => console.log("Autoplay diblokir."));
+                    }
+                    player.addEventListener('click', () => {
+                        if (player.paused) { player.play(); } else { player.pause(); }
                     });
                 }
+            } else {
+                document.body.innerHTML = '<h1>404: Not Found</h1>';
+                document.body.style.cssText = 'display:flex; justify-content:center; align-items:center; height:100vh; font-family: sans-serif;';
             }
-            // Jika ID tidak valid, 'page-content' tetap display:none, halaman akan tampak kosong.
         });
     </script>
 </body>
 </html>
-
-
-
