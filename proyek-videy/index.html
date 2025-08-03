@@ -1,8 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Not Found</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videy</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; border-bottom: 1px solid #e5e5e5; position: fixed; top: 0; left: 0; right: 0; background-color: #ffffff; z-index: 100; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .logo { font-size: 24px; font-weight: bold; color: #000; }
+        .upload-btn { background-color: #f0f0f0; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; }
+        .advertise-link { font-size: 14px; color: #333; text-decoration: none; }
+        .main-content { padding-top: 80px; display: flex; justify-content: center; align-items: flex-start; }
+        .video-wrapper { width: 100%; max-width: 400px; }
+        .video-player-container { width: 100%; background-color: #000; aspect-ratio: 9 / 16; margin-bottom: 20px; border-radius: 12px; overflow: hidden; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .ad-slot { width: 100%; min-height: 50px; display: flex; justify-content: center; align-items: center; }
+    </style>
 </head>
 <body>
+    <div id="page-content" style="display: none;">
+        <header class="header">
+            <div class="header-left">
+                <span class="logo">videy</span>
+                <button class="upload-btn">Upload</button>
+            </div>
+            <a href="#" class="advertise-link">Advertise</a>
+        </header>
+        <main class="main-content">
+            <div class="video-wrapper">
+                <div id="player-wrapper" class="video-player-container">
+                    <video id="videoPlayer" controls playsinline></video>
+                </div>
+                <div class="ad-slot" id="ad-slot-1"></div>
+            </div>
+        </main>
+    </div>
+    <script>
+        const videoList = {
+            "3e9b4yo5go": { title: "Judul Video", filename: "video1.mp4" },
+            // Pastikan 'filename' ini sama persis dengan nama file di folder /videos
+            "kodeunik2": { title: "Judul Video Dua", filename: "video2.mp4" }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const videoId = params.get('id');
+            const videoData = videoId ? videoList[videoId] : null;
+            const pageContent = document.getElementById('page-content');
+            const player = document.getElementById('videoPlayer');
+
+            if (videoData) {
+                pageContent.style.display = 'block';
+                document.title = videoData.title;
+                player.src = `videos/${videoData.filename}`; // Ini path yang benar untuk struktur baru
+                player.muted = true;
+                let playPromise = player.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
+                }
+            }
+        });
+    </script>
 </body>
 </html>
