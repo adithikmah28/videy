@@ -5,73 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videy</title>
     <style>
-        /* CSS Reset & Basic Setup */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            overflow: hidden; /* Mencegah scroll di level body */
+            overflow: hidden;
         }
-
-        /* Container utama untuk layout 100% tinggi layar */
         .page-container {
             display: flex;
             flex-direction: column;
-            height: 100vh; /* KUNCI #1: Mengisi 100% tinggi viewport */
+            height: 100vh;
         }
-
-        /* HEADER / NAVBAR */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 25px;
             border-bottom: 1px solid #e5e5e5;
-            flex-shrink: 0; /* Mencegah header menyusut */
+            flex-shrink: 0;
         }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { font-size: 24px; font-weight: bold; color: #000; }
         .upload-btn { background-color: #f0f0f0; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; }
         .advertise-link { font-size: 14px; color: #333; text-decoration: none; }
-
-        /* MAIN CONTENT AREA */
         .main-content {
-            flex-grow: 1; /* KUNCI #2: Mengisi sisa ruang kosong di bawah header */
+            flex-grow: 1;
             display: flex;
             justify-content: center;
-            align-items: center; /* Membuat konten berada di tengah secara vertikal & horizontal */
+            align-items: center;
             padding: 20px;
             box-sizing: border-box;
         }
-
-        /* Wrapper untuk Judul, Video, dan Iklan */
         .video-wrapper {
             width: 100%;
-            max-width: 420px; /* Lebar player di desktop, bisa disesuaikan */
+            max-width: 420px;
         }
-
-        /* ELEMEN JUDUL VIDEO BARU */
         .video-title {
             font-size: 18px;
             font-weight: 500;
             color: #111;
             margin-bottom: 12px;
-            text-align: left; /* Teks rata kiri */
-            /* Memotong teks jika terlalu panjang */
+            text-align: left;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        /* Video Player Container */
         .video-player-container {
             width: 100%;
             background-color: #000;
-            aspect-ratio: 9 / 16; /* Rasio potret, sempurna untuk mobile & desktop style */
+            aspect-ratio: 9 / 16;
             border-radius: 12px;
             overflow: hidden;
+            position: relative; /* Diperlukan untuk overlay jika mau ditambah nanti */
         }
         video {
             width: 100%;
@@ -93,17 +80,10 @@
 
         <main class="main-content">
             <div class="video-wrapper">
-                <!-- ============================================= -->
-                <!-- TEMPAT UNTUK JUDUL VIDEO ADA DI SINI          -->
                 <h1 id="videoTitle" class="video-title"></h1>
-                <!-- ============================================= -->
-
                 <div id="player-wrapper" class="video-player-container">
                     <video id="videoPlayer" controls playsinline></video>
                 </div>
-                
-                <!-- Kamu bisa menaruh ad-slot di sini jika masih mau -->
-                <!-- <div class="ad-slot"></div> -->
             </div>
         </main>
     </div>
@@ -111,7 +91,7 @@
     <script>
         const videoList = {
             "ibi1ehxw0s": {
-                title: "Contoh Video Satu yang Judulnya Mungkin Agak Panjang Sedikit",
+                title: "Contoh Video Satu",
                 filename: "video1.mp4" 
             },
             "p3w9rntb2z": {
@@ -127,21 +107,31 @@
             
             const pageContent = document.getElementById('page-content');
             const player = document.getElementById('videoPlayer');
-            const videoTitleEl = document.getElementById('videoTitle'); // Ambil elemen judul
+            const videoTitleEl = document.getElementById('videoTitle');
 
             if (videoData) {
-                pageContent.style.display = 'flex'; // Ganti ke flex untuk mengaktifkan layout baru
+                pageContent.style.display = 'flex';
                 document.title = videoData.title;
                 player.src = `videos/${videoData.filename}`;
-
-                // === PERUBAHAN BARU: ISI JUDUL VIDEO ===
                 videoTitleEl.textContent = videoData.title;
 
+                // Memulai video secara otomatis (muted)
                 player.muted = true;
                 let playPromise = player.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
                 }
+
+                // ==============================================================
+                // === INI DIA FITUR BARUNYA: KLIK UNTUK PLAY/PAUSE           ===
+                // ==============================================================
+                player.addEventListener('click', () => {
+                    if (player.paused) {
+                        player.play();
+                    } else {
+                        player.pause();
+                    }
+                });
             }
         });
     </script>
