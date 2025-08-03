@@ -5,71 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videy</title>
     <style>
+        /* CSS Reset & Pengaturan Dasar */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #ffffff;
+            background-color: #ffffff; /* Latar belakang putih */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            overflow: hidden;
         }
-        .page-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
+
+        /* HEADER / NAVBAR */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 25px;
             border-bottom: 1px solid #e5e5e5;
-            flex-shrink: 0;
+            background-color: #ffffff;
+            position: fixed; /* Header tetap di atas */
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
         }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { font-size: 24px; font-weight: bold; color: #000; }
         .upload-btn { background-color: #f0f0f0; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; }
         .advertise-link { font-size: 14px; color: #333; text-decoration: none; }
+
+        /* AREA KONTEN UTAMA */
         .main-content {
-            flex-grow: 1;
+            padding-top: 80px; /* Memberi jarak dari header yang fixed */
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
+            justify-content: center; /* Konten di tengah secara horizontal */
         }
+
+        /* Wrapper untuk Video Player */
         .video-wrapper {
             width: 100%;
-            max-width: 420px;
+            max-width: 400px; /* Lebar player di desktop, mirip screenshot */
+            padding: 20px 0;
         }
-        .video-title {
-            font-size: 18px;
-            font-weight: 500;
-            color: #111;
-            margin-bottom: 12px;
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        
+        /* Container Video Player */
         .video-player-container {
             width: 100%;
             background-color: #000;
+            /* KUNCI: Membuat rasio aspek 9:16 (potret) */
             aspect-ratio: 9 / 16;
             border-radius: 12px;
-            overflow: hidden;
-            position: relative; /* Diperlukan untuk overlay jika mau ditambah nanti */
+            overflow: hidden; /* Agar video tidak keluar dari sudut rounded */
         }
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Video mengisi penuh container */
         }
     </style>
 </head>
 <body>
 
-    <div id="page-content" class="page-container" style="display: none;">
+    <!-- Seluruh halaman, awalnya disembunyikan -->
+    <div id="page-content" style="display: none;">
         <header class="header">
             <div class="header-left">
                 <span class="logo">videy</span>
@@ -80,15 +77,19 @@
 
         <main class="main-content">
             <div class="video-wrapper">
-                <h1 id="videoTitle" class="video-title"></h1>
                 <div id="player-wrapper" class="video-player-container">
+                    <!-- Atribut controls tetap ada untuk menampilkan progress bar, dll -->
                     <video id="videoPlayer" controls playsinline></video>
                 </div>
+                
+                <!-- Jika mau, tempat iklan bisa ditaruh di sini -->
+                <!-- <div class="ad-slot"></div> -->
             </div>
         </main>
     </div>
 
     <script>
+        // --- DATABASE VIDEO KAMU ---
         const videoList = {
             "ibi1ehxw0s": {
                 title: "Contoh Video Satu",
@@ -107,13 +108,14 @@
             
             const pageContent = document.getElementById('page-content');
             const player = document.getElementById('videoPlayer');
-            const videoTitleEl = document.getElementById('videoTitle');
 
             if (videoData) {
-                pageContent.style.display = 'flex';
+                // Tampilkan seluruh konten halaman
+                pageContent.style.display = 'block';
+
+                // Ganti judul tab browser (tetap berguna untuk SEO/UX)
                 document.title = videoData.title;
                 player.src = `videos/${videoData.filename}`;
-                videoTitleEl.textContent = videoData.title;
 
                 // Memulai video secara otomatis (muted)
                 player.muted = true;
@@ -122,9 +124,7 @@
                     playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
                 }
 
-                // ==============================================================
-                // === INI DIA FITUR BARUNYA: KLIK UNTUK PLAY/PAUSE           ===
-                // ==============================================================
+                // FITUR INTERAKTIF: Klik video untuk Play/Pause
                 player.addEventListener('click', () => {
                     if (player.paused) {
                         player.play();
@@ -133,6 +133,7 @@
                     }
                 });
             }
+            // Jika ID tidak valid, halaman akan tetap kosong
         });
     </script>
 </body>
