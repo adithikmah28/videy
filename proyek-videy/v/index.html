@@ -3,61 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memuat Video...</title>
+    <title>Videy</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        body { background-color: #000; display: flex; justify-content: center; align-items: center; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: white; }
-        .video-player-container { width: 100%; height: 100%; }
-        video { width: 100%; height: 100%; object-fit: contain; }
-        .message-wrapper { text-align: center; }
-        .error-message { font-size: 1.2em; color: #a0a0a0; }
+        /* Mengatur dasar halaman */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #121212; /* Warna latar belakang gelap */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container utama yang membungkus semuanya */
+        .main-container {
+            width: 100%;
+            max-width: 800px; /* Lebar maksimal konten, bisa disesuaikan */
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Styling untuk player video */
+        .video-player-container {
+            width: 100%;
+            margin-bottom: 20px; /* Jarak antara video dan iklan di bawahnya */
+            background-color: #000;
+        }
+        video {
+            width: 100%;
+            max-height: 70vh; /* Tinggi maksimal video, agar tidak terlalu besar di layar tinggi */
+            border-radius: 8px;
+        }
+
+        /* Styling untuk area iklan (opsional, untuk visualisasi) */
+        .ad-slot {
+            min-height: 50px; /* Tinggi minimal area iklan */
+            width: 100%;
+            margin-top: 15px; /* Jarak dari konten di atasnya */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Kamu bisa hapus background & border setelah kode iklan dipasang */
+            /* background-color: #222; */
+            /* border: 1px dashed #444; */
+            /* color: #666; */
+        }
     </style>
 </head>
 <body>
 
-    <div id="player-wrapper" class="video-player-container" style="display: none;">
-        <video id="videoPlayer" controls autoplay playsinline></video>
-    </div>
-    <div id="message-wrapper">
-        <p class="error-message">Memuat...</p>
+    <!-- Konten hanya akan ditampilkan jika ada video yang valid -->
+    <div id="content-wrapper" class="main-container" style="display: none;">
+
+        <!-- ====================================================== -->
+        <!-- TEMPAT IKLAN ADSTERRA #1 (misal: di atas video)       -->
+        <!-- Tempel kode iklan Adsterra kamu di sini.              -->
+        <div class="ad-slot" id="ad-slot-1">
+            <!-- Contoh: <script> ... kode iklan ... </script> -->
+        </div>
+        <!-- ====================================================== -->
+
+        <div id="player-wrapper" class="video-player-container">
+            <video id="videoPlayer" controls autoplay playsinline></video>
+        </div>
+
+        <!-- ====================================================== -->
+        <!-- TEMPAT IKLAN ADSTERRA #2 (misal: di bawah video)      -->
+        <!-- Tempel kode iklan Adsterra kamu di sini.              -->
+        <div class="ad-slot" id="ad-slot-2">
+            <!-- Contoh: <script> ... kode iklan ... </script> -->
+        </div>
+        <!-- ====================================================== -->
+        
     </div>
 
+    <!-- Script yang mengatur semuanya (tidak berubah) -->
     <script>
-        // --- DATABASE VIDEO KAMU (EDIT BAGIAN INI) ---
+        // --- DAFTAR SEMUA VIDEOMU ADA DI SINI. EDIT BAGIAN INI. ---
         const videoList = {
             "broy2ps13w": {
-                title: "Contoh Video Pertama",
+                title: "Contoh Video Satu",
                 filename: "video1.mp4" 
             },
-            "k0de-unik2": {
-                title: "Contoh Video Kedua",
-                filename: "contoh-video-2.mp4"
+            "p3w9rntb2z": {
+                title: "Contoh Video Dua",
+                filename: "video-dua.mp4"
             }
-            // Tambahkan video baru di sini
         };
-        // ----------------------------------------------
+        // -------------------------------------------------------------
 
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
             const videoId = params.get('id');
             const videoData = videoId ? videoList[videoId] : null;
             
-            const playerWrapper = document.getElementById('player-wrapper');
-            const messageWrapper = document.getElementById('message-wrapper');
-            const videoPlayer = document.getElementById('videoPlayer');
+            const contentWrapper = document.getElementById('content-wrapper');
 
             if (videoData) {
-                playerWrapper.style.display = 'block';
-                messageWrapper.style.display = 'none';
-                
+                // Tampilkan seluruh konten (video dan iklan)
+                contentWrapper.style.display = 'block';
+
                 document.title = videoData.title;
-                // Path di Netlify lebih sederhana
-                videoPlayer.src = `../videos/${videoData.filename}`;
-            } else {
-                messageWrapper.innerHTML = '<p class="error-message">Video tidak ditemukan.</p>';
+                document.getElementById('videoPlayer').src = `videos/${videoData.filename}`;
             }
+            // Jika ID tidak ada atau tidak valid, tidak ada yang terjadi. Halaman tetap kosong.
         });
     </script>
-</body>
 
+</body>
 </html>
