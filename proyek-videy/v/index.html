@@ -5,86 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videy</title>
     <style>
-        /* Mengatur dasar halaman */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #121212; /* Warna latar belakang gelap */
+            background-color: #121212;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-
-        /* Container utama yang membungkus semuanya */
         .main-container {
             width: 100%;
-            max-width: 800px; /* Lebar maksimal konten, bisa disesuaikan */
+            max-width: 800px;
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
         }
-
-        /* Styling untuk player video */
         .video-player-container {
             width: 100%;
-            margin-bottom: 20px; /* Jarak antara video dan iklan di bawahnya */
+            margin-bottom: 20px;
             background-color: #000;
         }
         video {
             width: 100%;
-            max-height: 70vh; /* Tinggi maksimal video, agar tidak terlalu besar di layar tinggi */
+            max-height: 70vh;
             border-radius: 8px;
         }
-
-        /* Styling untuk area iklan (opsional, untuk visualisasi) */
         .ad-slot {
-            min-height: 50px; /* Tinggi minimal area iklan */
+            min-height: 50px;
             width: 100%;
-            margin-top: 15px; /* Jarak dari konten di atasnya */
+            margin: 15px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Kamu bisa hapus background & border setelah kode iklan dipasang */
-            /* background-color: #222; */
-            /* border: 1px dashed #444; */
-            /* color: #666; */
         }
     </style>
 </head>
 <body>
 
-    <!-- Konten hanya akan ditampilkan jika ada video yang valid -->
     <div id="content-wrapper" class="main-container" style="display: none;">
 
         <!-- ====================================================== -->
-        <!-- TEMPAT IKLAN ADSTERRA #1 (misal: di atas video)       -->
-        <!-- Tempel kode iklan Adsterra kamu di sini.              -->
+        <!-- TEMPAT IKLAN ADSTERRA #1 (di atas video)              -->
         <div class="ad-slot" id="ad-slot-1">
-            <!-- Contoh: <script> ... kode iklan ... </script> -->
+            <!-- Tempel kode iklan Adsterra kamu di sini. -->
         </div>
         <!-- ====================================================== -->
 
         <div id="player-wrapper" class="video-player-container">
-            <video id="videoPlayer" controls autoplay playsinline></video>
+            <!-- ========================================================== -->
+            <!-- INI BAGIAN YANG DIPERBAIKI: DITAMBAHKAN "muted"            -->
+            <video id="videoPlayer" controls autoplay muted playsinline></video>
+            <!-- ========================================================== -->
         </div>
 
         <!-- ====================================================== -->
-        <!-- TEMPAT IKLAN ADSTERRA #2 (misal: di bawah video)      -->
-        <!-- Tempel kode iklan Adsterra kamu di sini.              -->
+        <!-- TEMPAT IKLAN ADSTERRA #2 (di bawah video)             -->
         <div class="ad-slot" id="ad-slot-2">
-            <!-- Contoh: <script> ... kode iklan ... </script> -->
+            <!-- Tempel kode iklan Adsterra kamu di sini. -->
         </div>
         <!-- ====================================================== -->
         
     </div>
 
-    <!-- Script yang mengatur semuanya (tidak berubah) -->
     <script>
-        // --- DAFTAR SEMUA VIDEOMU ADA DI SINI. EDIT BAGIAN INI. ---
+        // --- DAFTAR VIDEO KAMU (EDIT BAGIAN INI) ---
         const videoList = {
-            "broy2ps13w": {
+            "fki0bm24qw": {
                 title: "Contoh Video Satu",
                 filename: "video1.mp4" 
             },
@@ -93,7 +81,7 @@
                 filename: "video-dua.mp4"
             }
         };
-        // -------------------------------------------------------------
+        // ----------------------------------------------------
 
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
@@ -103,13 +91,10 @@
             const contentWrapper = document.getElementById('content-wrapper');
 
             if (videoData) {
-                // Tampilkan seluruh konten (video dan iklan)
                 contentWrapper.style.display = 'block';
-
                 document.title = videoData.title;
                 document.getElementById('videoPlayer').src = `videos/${videoData.filename}`;
             }
-            // Jika ID tidak ada atau tidak valid, tidak ada yang terjadi. Halaman tetap kosong.
         });
     </script>
 
