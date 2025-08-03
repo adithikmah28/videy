@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memuat Video...</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        body { background-color: #000; display: flex; justify-content: center; align-items: center; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: white; }
+        .video-player-container { width: 100%; height: 100%; }
+        video { width: 100%; height: 100%; object-fit: contain; }
+        .message-wrapper { text-align: center; }
+        .error-message { font-size: 1.2em; color: #a0a0a0; }
+    </style>
+</head>
+<body>
+
+    <div id="player-wrapper" class="video-player-container" style="display: none;">
+        <video id="videoPlayer" controls autoplay playsinline></video>
+    </div>
+    <div id="message-wrapper">
+        <p class="error-message">Memuat...</p>
+    </div>
+
+    <script>
+        // --- DATABASE VIDEO KAMU (EDIT BAGIAN INI) ---
+        const videoList = {
+            "cHxa1FfH1": {
+                title: "Contoh Video Pertama",
+                filename: "contoh-video-1.mp4" 
+            },
+            "k0de-unik2": {
+                title: "Contoh Video Kedua",
+                filename: "contoh-video-2.mp4"
+            }
+            // Tambahkan video baru di sini
+        };
+        // ----------------------------------------------
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const videoId = params.get('id');
+            const videoData = videoId ? videoList[videoId] : null;
+            
+            const playerWrapper = document.getElementById('player-wrapper');
+            const messageWrapper = document.getElementById('message-wrapper');
+            const videoPlayer = document.getElementById('videoPlayer');
+
+            if (videoData) {
+                playerWrapper.style.display = 'block';
+                messageWrapper.style.display = 'none';
+                
+                document.title = videoData.title;
+                // Path di Netlify lebih sederhana
+                videoPlayer.src = `../videos/${videoData.filename}`;
+            } else {
+                messageWrapper.innerHTML = '<p class="error-message">Video tidak ditemukan.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
