@@ -2,6 +2,12 @@
 <html lang="id">
 <head>
     <title>Videy</title>
+    
+    <!-- ========================================================== -->
+    <!-- INI DIA FAVICON YANG BARU DITAMBAHKAN                      -->
+    <link rel="icon" type="image/x-icon" href="https://videy.co/favicon.ico">
+    <!-- ========================================================== -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -48,21 +54,14 @@
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Defaultnya 'cover' untuk tampilan normal */
+            object-fit: cover;
         }
-        
-        /* ========================================================== */
-        /* INI DIA PERBAIKAN UNTUK MASALAH FULLSCREEN                 */
-        /* Aturan ini hanya aktif saat elemen video dalam mode fullscreen */
         video:fullscreen {
-            object-fit: contain; /* Ganti ke 'contain' agar video utuh */
+            object-fit: contain;
         }
-        /* Untuk browser Safari/Webkit lama */
         video:-webkit-full-screen {
             object-fit: contain;
         }
-        /* ========================================================== */
-
         .footer {
             padding: 20px 0;
             margin-top: 20px;
@@ -100,7 +99,6 @@
     </div>
 
     <script>
-        // SCRIPT JAVASCRIPT TIDAK PERLU DIUBAH SAMA SEKALI
         const videoList = {
             "p3w9rntb2z": {
                 type: 'redirect',
@@ -110,7 +108,7 @@
             "2xtqstiqc1": {
                 type: 'video',
                 title: "Contoh Video Keren",
-                filename: "video1.mp4" 
+                filename: "video-keren.mp4" 
             }
         };
 
