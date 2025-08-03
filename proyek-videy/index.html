@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #ffffff; /* Latar belakang putih */
+            background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
@@ -22,7 +22,7 @@
             padding: 15px 25px;
             border-bottom: 1px solid #e5e5e5;
             background-color: #ffffff;
-            position: fixed; /* Header tetap di atas */
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
@@ -35,15 +35,15 @@
 
         /* AREA KONTEN UTAMA */
         .main-content {
-            padding-top: 80px; /* Memberi jarak dari header yang fixed */
+            padding-top: 80px;
             display: flex;
-            justify-content: center; /* Konten di tengah secara horizontal */
+            justify-content: center;
         }
 
         /* Wrapper untuk Video Player */
         .video-wrapper {
             width: 100%;
-            max-width: 400px; /* Lebar player di desktop, mirip screenshot */
+            max-width: 400px;
             padding: 20px 0;
         }
         
@@ -51,21 +51,25 @@
         .video-player-container {
             width: 100%;
             background-color: #000;
-            /* KUNCI: Membuat rasio aspek 9:16 (potret) */
-            aspect-ratio: 9 / 16;
             border-radius: 12px;
-            overflow: hidden; /* Agar video tidak keluar dari sudut rounded */
+            overflow: hidden;
+            
+            /* ========================================================== */
+            /* INI BAGIAN YANG DIUBAH SESUAI PERMINTAAN                   */
+            /* Rasio aspek diubah menjadi sedikit lebih lebar (tidak terlalu tinggi) */
+            /* Opsi lain: 2 / 3 atau 4 / 5. Coba-coba saja mana yang paling pas. */
+            aspect-ratio: 3 / 4;
+            /* ========================================================== */
         }
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Video mengisi penuh container */
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
 
-    <!-- Seluruh halaman, awalnya disembunyikan -->
     <div id="page-content" style="display: none;">
         <header class="header">
             <div class="header-left">
@@ -78,12 +82,8 @@
         <main class="main-content">
             <div class="video-wrapper">
                 <div id="player-wrapper" class="video-player-container">
-                    <!-- Atribut controls tetap ada untuk menampilkan progress bar, dll -->
                     <video id="videoPlayer" controls playsinline></video>
                 </div>
-                
-                <!-- Jika mau, tempat iklan bisa ditaruh di sini -->
-                <!-- <div class="ad-slot"></div> -->
             </div>
         </main>
     </div>
@@ -110,21 +110,14 @@
             const player = document.getElementById('videoPlayer');
 
             if (videoData) {
-                // Tampilkan seluruh konten halaman
                 pageContent.style.display = 'block';
-
-                // Ganti judul tab browser (tetap berguna untuk SEO/UX)
                 document.title = videoData.title;
                 player.src = `videos/${videoData.filename}`;
-
-                // Memulai video secara otomatis (muted)
                 player.muted = true;
                 let playPromise = player.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
                 }
-
-                // FITUR INTERAKTIF: Klik video untuk Play/Pause
                 player.addEventListener('click', () => {
                     if (player.paused) {
                         player.play();
@@ -133,7 +126,6 @@
                     }
                 });
             }
-            // Jika ID tidak valid, halaman akan tetap kosong
         });
     </script>
 </body>
