@@ -5,75 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videy</title>
     <style>
-        /* CSS Reset & Pengaturan Dasar */
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+            margin: 0; padding: 0; height: 100%;
             background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-
-        /* HEADER / NAVBAR */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            border-bottom: 1px solid #e5e5e5;
-            background-color: #ffffff;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 25px; border-bottom: 1px solid #e5e5e5;
+            background-color: #ffffff; position: fixed;
+            top: 0; left: 0; right: 0; z-index: 100;
         }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { font-size: 24px; font-weight: bold; color: #000; }
         .upload-btn { background-color: #f0f0f0; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; }
         .advertise-link { font-size: 14px; color: #333; text-decoration: none; }
-
-        /* AREA KONTEN UTAMA */
         .main-content {
-            padding-top: 80px;
-            display: flex;
-            justify-content: center;
+            padding-top: 80px; display: flex; justify-content: center;
         }
-
-        /* Wrapper untuk Video Player */
         .video-wrapper {
             width: 100%;
-            max-width: 400px;
+            max-width: 400px; /* Lebar standar untuk tampilan mobile-first */
             padding: 20px 0;
         }
-        
-        /* Container Video Player */
         .video-player-container {
-            width: 100%;
-            background-color: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            
-            /* ========================================================== */
-            /* KEMBALI KE RASIO ASPEK TINGGI SEPERTI DI SCREENSHOT TARGET */
+            width: 100%; background-color: #000;
+            border-radius: 12px; overflow: hidden;
+            /* Kunci #1: Rasio aspek tinggi seperti di videy.co */
             aspect-ratio: 9 / 16;
-            /* ========================================================== */
         }
-        
-        /* ========================================================== */
-        /* INI PERBAIKAN PALING PENTING UNTUK MENDAPATKAN TAMPILAN GAMBAR 2 */
         video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Diubah kembali menjadi 'cover' */
+            width: 100%; height: 100%;
+            /* Kunci #2: Memenuhi container, sama seperti videy.co */
+            object-fit: cover;
         }
-        /* ========================================================== */
     </style>
 </head>
 <body>
 
     <div id="page-content" style="display: none;">
         <header class="header">
+            <!-- Isi header tetap sama -->
             <div class="header-left">
                 <span class="logo">videy</span>
                 <button class="upload-btn">Upload</button>
@@ -91,19 +63,9 @@
     </div>
 
     <script>
-        // --- DATABASE VIDEO KAMU ---
-        const videoList = {
-            "ibi1ehxw0s": {
-                title: "Contoh Video Satu",
-                filename: "video1.mp4" 
-            },
-            "p3w9rntb2z": {
-                title: "Contoh Video Dua",
-                filename: "video-dua.mp4"
-            }
-        };
+        // Database video dan script JavaScript lainnya tetap sama
+        const videoList = { "u7xje8fka9": { title: "Video Satu", filename: "video-satu.mp4" } };
 
-        // ... Sisa script JavaScript tetap sama, tidak perlu diubah ...
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
             const videoId = params.get('id');
@@ -117,7 +79,7 @@
                 player.muted = true;
                 let playPromise = player.play();
                 if (playPromise !== undefined) {
-                    playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
+                    playPromise.catch(error => console.log("Autoplay diblokir."));
                 }
                 player.addEventListener('click', () => {
                     if (player.paused) { player.play(); } else { player.pause(); }
