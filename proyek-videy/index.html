@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
-    <!-- CSS REKAYASA ULANG DARI videy.co -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -15,10 +14,7 @@
             margin: 0;
             color: #000;
         }
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
+        a { color: inherit; text-decoration: none; }
         .container {
             width: 100%;
             max-width: 960px;
@@ -33,21 +29,9 @@
             padding: 15px 0;
             border-bottom: 1px solid #e5e5e5;
         }
-        .top .logo a {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-        }
-        .top .upload {
-            background: #f2f2f2;
-            padding: 8px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .top .more a {
-            font-size: 14px;
-        }
+        .top .logo a { font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; }
+        .top .upload { background: #f2f2f2; padding: 8px 16px; border-radius: 16px; font-size: 14px; font-weight: 500; }
+        .top .more a { font-size: 14px; }
         .video {
             padding: 20px 0;
             display: flex;
@@ -64,8 +48,21 @@
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Defaultnya 'cover' untuk tampilan normal */
         }
+        
+        /* ========================================================== */
+        /* INI DIA PERBAIKAN UNTUK MASALAH FULLSCREEN                 */
+        /* Aturan ini hanya aktif saat elemen video dalam mode fullscreen */
+        video:fullscreen {
+            object-fit: contain; /* Ganti ke 'contain' agar video utuh */
+        }
+        /* Untuk browser Safari/Webkit lama */
+        video:-webkit-full-screen {
+            object-fit: contain;
+        }
+        /* ========================================================== */
+
         .footer {
             padding: 20px 0;
             margin-top: 20px;
@@ -75,33 +72,21 @@
             display: flex;
             justify-content: space-between;
         }
-        .footer .legal {
-            display: flex;
-            gap: 15px;
-        }
+        .footer .legal { display: flex; gap: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- Container utama, awalnya disembunyikan. Hanya akan muncul untuk tipe 'video'. -->
     <div id="page-content" class="container" style="display: none;">
       <div class="top">
-        <div class="logo">
-          <a href="#">videy</a>
-        </div>
-        <a href="#">
-            <div class="upload">Upload</div>
-        </a>
-        <div class="more">
-          <a href="#">Advertise</a>
-        </div>
+        <div class="logo"><a href="#">videy</a></div>
+        <a href="#"><div class="upload">Upload</div></a>
+        <div class="more"><a href="#">Advertise</a></div>
       </div>
       
       <div class="video">
         <div class="video-inner">
-          <video id="videoPlayer" controls playsinline>
-            <source type="video/mp4">
-          </video>
+          <video id="videoPlayer" controls playsinline></video>
         </div>
       </div>
       
@@ -114,61 +99,47 @@
       </div>
     </div>
 
-    <!-- SCRIPT UTAMA WEBSITE YANG SUDAH DI-UPGRADE -->
     <script>
-        // --- DATABASE VIDEO & LINK KAMU ---
+        // SCRIPT JAVASCRIPT TIDAK PERLU DIUBAH SAMA SEKALI
         const videoList = {
-            // CONTOH VIDEO BIASA
-            "ibi1ehxw0s": {
-                type: 'video',
-                title: "Contoh Video Keren",
-                filename: "video1.mp4" 
-            },
-            // CONTOH DIRECT LINK ADSTERRA
             "p3w9rntb2z": {
                 type: 'redirect',
                 title: 'Loading...',
-                url: 'https://www.profitableratecpm.com/xdz7cfckrz?key=4da66776844b84dbeb38d4fbfc6fadb9'
+                url: 'https://www.profitableratecpm.com/n628mmmy13?key=cf801284c3d129d36815d85e16c550f8'
+            },
+            "2xtqstiqc1": {
+                type: 'video',
+                title: "Contoh Video Keren",
+                filename: "video1.mp4" 
             }
-            // Tambahkan video atau link lain di sini
         };
 
-        // --- LOGIKA UTAMA WEBSITE (SUDAH DI-UPGRADE) ---
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
             const videoId = params.get('id');
             const data = videoId ? videoList[videoId] : null;
             
             if (data) {
-                // LOGIKA BARU: Cek tipe data
                 if (data.type === 'redirect') {
-                    // Jika tipe adalah REDIRECT, langsung alihkan pengguna
                     document.title = data.title;
                     window.location.replace(data.url);
-
                 } else if (data.type === 'video') {
-                    // Jika tipe adalah VIDEO, tampilkan halaman player
                     const pageContent = document.getElementById('page-content');
                     const player = document.getElementById('videoPlayer');
-                    
                     pageContent.style.display = 'block';
                     document.getElementById('year').textContent = new Date().getFullYear();
                     document.title = data.title + " — Watch on Videy";
                     player.src = `videos/${data.filename}`;
-                    
                     player.muted = true;
                     let playPromise = player.play();
                     if (playPromise !== undefined) {
-                        playPromise.catch(error => console.log("Autoplay diblokir, pengguna harus menekan play manual."));
+                        playPromise.catch(error => console.log("Autoplay diblokir."));
                     }
-
                     player.addEventListener('click', () => {
                         if (player.paused) { player.play(); } else { player.pause(); }
                     });
                 }
-
             } else {
-                // Jika ID tidak ditemukan sama sekali, tampilkan pesan error
                 document.body.innerHTML = '<h1>404: Not Found</h1>';
                 document.body.style.cssText = 'display:flex; justify-content:center; align-items:center; height:100vh; font-family: sans-serif;';
             }
@@ -176,4 +147,3 @@
     </script>
 </body>
 </html>
-
